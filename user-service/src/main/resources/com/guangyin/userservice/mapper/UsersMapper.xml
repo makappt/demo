@@ -7,13 +7,16 @@
     <resultMap id="BaseResultMap" type="com.guangyin.userservice.entity.Users">
             <id property="userId" column="user_id" />
             <result property="username" column="username" />
-            <result property="passwd" column="passwd" />
+            <result property="password" column="password" />
             <result property="email" column="email" />
+            <result property="salt" column="salt" />
             <result property="phone" column="phone" />
-            <result property="gmtCreate" column="gmt_create" />
+            <result property="createTime" column="create_time" />
+            <result property="updateTime" column="update_time" />
     </resultMap>
 
     <sql id="Base_Column_List">
-        user_id,username,passwd,email,phone,gmt_create
+        user_id,username,password,email,salt,phone,
+        create_time,update_time
     </sql>
 </mapper>

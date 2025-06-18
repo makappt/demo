@@ -1,5 +1,6 @@
 package com.guangyin.exception;
 
+import com.guangyin.core.constants.MicroServiceConstants;
 import com.guangyin.core.exception.MicroServiceBusinessException;
 import com.guangyin.core.exception.MicroServiceFrameWorkException;
 import com.guangyin.core.response.ResponseCode;
