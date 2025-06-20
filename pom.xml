@@ -25,10 +25,10 @@
         <spring-boot.version>2.7.3</spring-boot.version>
         <spring-cloud.version>2021.0.8</spring-cloud.version>
         <spring-cloud-alibaba.version>2021.0.5.0</spring-cloud-alibaba.version>
-        <mysql.connector.version>8.0.11</mysql.connector.version>
+        <mysql.connector.version>8.0.28</mysql.connector.version>
         <rocketmq.version>2.2.2</rocketmq.version>
-        <shardingsphere.version>5.1.0</shardingsphere.version>
-        <seata.version>1.4.2</seata.version>
+        <shardingsphere.version>5.2.1</shardingsphere.version>
+        <seata.version>1.5.2</seata.version>
         <mybatis-plus.version>3.5.2</mybatis-plus.version>
         <jjwt.version>0.7.0</jjwt.version>
         <mapstruct.version>1.5.2.Final</mapstruct.version>
@@ -38,6 +38,8 @@
         <hutool.version>4.5.18</hutool.version>
         <guava.version>20.0</guava.version>
         <commons-collections.version>3.2.1</commons-collections.version>
+        <snakeyaml.version>1.33</snakeyaml.version>
+        <jaxb.version>2.3.1</jaxb.version>
     </properties>
 
     <dependencyManagement>
@@ -90,6 +92,12 @@
                 <version>${shardingsphere.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.yaml</groupId>
+                <artifactId>snakeyaml</artifactId>
+                <version>${snakeyaml.version}</version>
+            </dependency>
+
             <!--seata-->
             <dependency>
                 <groupId>io.seata</groupId>
@@ -120,6 +128,12 @@
             <dependency>
                 <groupId>org.mapstruct</groupId>
                 <artifactId>mapstruct</artifactId>
+                <version>${mapstruct.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct-processor</artifactId>
                 <version>${mapstruct.version}</version>
             </dependency>
 
@@ -162,6 +176,12 @@
                 <groupId>commons-collections</groupId>
                 <artifactId>commons-collections</artifactId>
                 <version>${commons-collections.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>javax.xml.bind</groupId>
+                <artifactId>jaxb-api</artifactId>
+                <version>${jaxb.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

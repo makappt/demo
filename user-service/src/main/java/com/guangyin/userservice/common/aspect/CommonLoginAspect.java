@@ -126,7 +126,11 @@ public class CommonLoginAspect {
         }
         // 从缓存中获取token
         Cache cache = cacheManager.getCache(CacheConstants.MICRO_SERVICE_CACHE_NAME);
-        Object redisAccessToken = cache.get(UserConstants.USER_LOGIN_PREFIX + userId);
+        Cache.ValueWrapper valueWrapper = cache.get(UserConstants.USER_LOGIN_PREFIX + userId);
+        if (Objects.isNull(valueWrapper)) {
+            return false;
+        }
+        Object redisAccessToken = valueWrapper.get();
         // 如果缓存中没有对应的token，说明用户未登录或登录已过期
         if (Objects.isNull(redisAccessToken)) {
             return false;

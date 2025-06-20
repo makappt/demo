@@ -81,6 +81,11 @@
             <artifactId>jjwt</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

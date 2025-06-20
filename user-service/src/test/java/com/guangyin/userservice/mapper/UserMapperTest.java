@@ -22,12 +22,12 @@ public class UserMapperTest {
     @Test
     public void testInsertUserSuccess() {
         // 删除所有数据
-        usersMapper.delete(null);
+        //usersMapper.delete(null);
         // 插入数据
-        for(int i = 0; i < 20; ++i)
+        for(int i = 20; i < 40; ++i)
         {
             Users user = new Users();
-            user.setPasswd("123456");
+            user.setPassword("123456");
             user.setEmail("lisi@example.com");
             user.setPhone("1000000000");
             user.setUsername("lisi" + i);
@@ -40,7 +40,7 @@ public class UserMapperTest {
 
         //查询username为lisi15的用户
         QueryWrapper<Users> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("username", "lisi15");
+        queryWrapper.eq("username", "lisi20");
         Users user = usersMapper.selectOne(queryWrapper);
         Assert.assertNotNull(user);
         log.info("查询到的用户信息: {}", user);

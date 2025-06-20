@@ -19,4 +19,5 @@ public class UserConstants {
      * 一天时间的毫秒数
      */
     public static final Long ONE_DAY_LONG = 24 * 60 * 60 * 1000L;
-}
+
+    }

@@ -5,18 +5,20 @@
 <mapper namespace="com.guangyin.userservice.mapper.UsersMapper">
 
     <resultMap id="BaseResultMap" type="com.guangyin.userservice.entity.Users">
-            <id property="userId" column="user_id" />
-            <result property="username" column="username" />
-            <result property="password" column="password" />
-            <result property="email" column="email" />
-            <result property="salt" column="salt" />
-            <result property="phone" column="phone" />
-            <result property="createTime" column="create_time" />
-            <result property="updateTime" column="update_time" />
+        <id property="userId" column="user_id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="email" column="email"/>
+        <result property="salt" column="salt"/>
+        <result property="phone" column="phone"/>
+        <result property="roleId" column="role_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        user_id,username,password,email,salt,phone,
+        user_id
+        ,username,password,email,salt,phone,roleId,
         create_time,update_time
     </sql>
 </mapper>

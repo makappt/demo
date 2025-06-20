@@ -3,7 +3,9 @@ package com.guangyin.core.response;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -13,7 +15,8 @@ import java.util.Objects;
  * 使用 @JsonInclude 注解控制序列化行为，属性值为 null 时不包含在 JSON 输出中。
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Getter
+@Data
+@NoArgsConstructor(force = true)
 public class Result<T> implements Serializable {
 
     private static final long serialVersionUID = 1L;

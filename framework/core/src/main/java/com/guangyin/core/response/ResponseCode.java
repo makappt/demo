@@ -12,7 +12,7 @@ public enum ResponseCode {
     /**
      * 成功
      */
-    SUCCESS(0, "SUCCESS"),
+    SUCCESS(200, "SUCCESS"),
     /**
      * 错误
      */
@@ -20,31 +20,20 @@ public enum ResponseCode {
     /**
      * token过期
      */
-    TOKEN_EXPIRE(2, "TOKEN_EXPIRE"),
+    TOKEN_EXPIRE(401, "TOKEN_EXPIRE"),
     /**
      * 参数错误
      */
-    ERROR_PARAM(3, "ERROR_PARAM"),
+    ERROR_PARAM(400, "ERROR_PARAM"),
     /**
      * 无权限访问
      */
-    ACCESS_DENIED(4, "ACCESS_DENIED"),
-    /**
-     * 分享的文件丢失
-     */
-    SHARE_FILE_MISS(5, "分享的文件丢失"),
-    /**
-     * 分享已经被取消
-     */
-    SHARE_CANCELLED(6, "分享已经被取消"),
-    /**
-     * 分享已过期
-     */
-    SHARE_EXPIRE(7, "分享已过期"),
+    ACCESS_DENIED(403, "ACCESS_DENIED"),
+
     /**
      * 需要登录
      */
-    NEED_LOGIN(10, "NEED_LOGIN");
+    NEED_LOGIN(401, "NEED_LOGIN");
 
     /**
      * 响应码
