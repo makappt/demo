@@ -1,10 +1,12 @@
 package com.guangyin.userservice.converter;
 
 import com.guangyin.userservice.context.ChangePasswordContext;
+import com.guangyin.userservice.context.UpdateUserContext;
 import com.guangyin.userservice.context.UserLoginContext;
 import com.guangyin.userservice.context.UserRegisterContext;
 import com.guangyin.userservice.entity.Users;
 import com.guangyin.userservice.po.ChangePasswordPO;
+import com.guangyin.userservice.po.UpdateUserPO;
 import com.guangyin.userservice.po.UserLoginPO;
 import com.guangyin.userservice.po.UserRegisterPO;
 import com.guangyin.userservice.vo.UserVO;
@@ -65,4 +67,20 @@ public interface UserConverter {
      * @return
      */
     ChangePasswordContext changePasswordPOToChangePasswordContext(ChangePasswordPO changePasswordPO);
+
+    /**
+     * 将用户更新PO转换为用户更新上下文
+     *
+     * @param updateUserPO
+     * @return
+     */
+    UpdateUserContext updateUserPOToUpdateUserContext(UpdateUserPO updateUserPO) ;
+
+    /**
+     * 将用户更新上下文转换为用户实体
+     *
+     * @param context
+     * @return
+     */
+    Users updateUserContextToUsers(UpdateUserContext context);
 }

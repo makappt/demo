@@ -3,11 +3,13 @@ package com.guangyin.userservice.controller;
 import com.guangyin.core.response.Result;
 import com.guangyin.userservice.common.annotation.LoginIgnore;
 import com.guangyin.userservice.context.ChangePasswordContext;
+import com.guangyin.userservice.context.UpdateUserContext;
 import com.guangyin.userservice.context.UserLoginContext;
 import com.guangyin.userservice.context.UserRegisterContext;
 import com.guangyin.userservice.converter.UserConverter;
 import com.guangyin.userservice.entity.Users;
 import com.guangyin.userservice.po.ChangePasswordPO;
+import com.guangyin.userservice.po.UpdateUserPO;
 import com.guangyin.userservice.po.UserLoginPO;
 import com.guangyin.userservice.po.UserRegisterPO;
 import com.guangyin.userservice.service.UserService;
@@ -95,7 +97,11 @@ public class UserController {
      * @return
      */
     @PutMapping("/user/{userId}")
-    public Result update(@PathVariable Long userId) {
+    public Result update(@PathVariable Long userId, @Validated @RequestBody UpdateUserPO updateUserPO)
+    {
+        UpdateUserContext context = userConverter.updateUserPOToUpdateUserContext(updateUserPO);
+        context.setUserId(userId);
+        usersService.update(context);
         return Result.success();
     }
 

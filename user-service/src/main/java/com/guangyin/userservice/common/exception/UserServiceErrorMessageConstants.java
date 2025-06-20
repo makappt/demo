@@ -45,4 +45,14 @@ public class UserServiceErrorMessageConstants {
      * 退出登录失败
      */
     public static final String EXIT_FAILED = "退出登录失败，请稍后再试";
+    /**
+     * 更新用户信息失败
+     */
+    public static final String UPDATE_USER_FAILED = "更新用户信息失败，请稍后再试";
+    /**
+     * 只有超级管理员可以修改用户角色信息
+     */
+    public static final String ONLY_SUPER_ADMIN_CAN_CHANGE_ROLE = "只有超级管理员可以修改用户角色信息，请联系管理员进行操作";
+
+
 }

@@ -60,6 +60,51 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole>
         }
         return userRole.getRoleId();
     }
+
+    @Override
+    public Integer upgradeToAdmin(Long userId) {
+        QueryWrapper<UserRole> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", userId);
+        UserRole userRole = this.getOne(queryWrapper);
+
+        if (Objects.isNull(userRole)) {
+            return null; // 用户没有角色信息
+        }
+
+        // 如果用户已经是管理员，则不需要升级
+        if (userRole.getRoleId().equals(UserRoleEnum.ADMIN.getCode())) {
+            return UserRoleEnum.ADMIN.getCode();
+        }
+
+        // 升级为管理员
+        userRole.setRoleId(UserRoleEnum.ADMIN.getCode());
+        this.updateById(userRole);
+
+        return UserRoleEnum.ADMIN.getCode();
+    }
+
+    @Override
+    public Integer downgradeToUser(Long userId) {
+
+        QueryWrapper<UserRole> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", userId);
+        UserRole userRole = this.getOne(queryWrapper);
+
+        if (Objects.isNull(userRole)) {
+            return null; // 用户没有角色信息
+        }
+
+        // 如果用户已经是普通用户，则不需要降级
+        if (userRole.getRoleId().equals(UserRoleEnum.USER.getCode())) {
+            return UserRoleEnum.USER.getCode();
+        }
+
+        // 降级为普通用户
+        userRole.setRoleId(UserRoleEnum.USER.getCode());
+        this.updateById(userRole);
+
+        return UserRoleEnum.USER.getCode();
+    }
 }
 
 

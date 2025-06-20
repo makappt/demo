@@ -60,7 +60,12 @@ public class PermissionController {
      */
     @PostMapping("/permission/role/upgrade")
     public Result upgradeToAdmin(Long userId) {
-        return Result.success();
+        if(Objects.isNull(userId) || userId <= 0) {
+            return Result.fail(PermissionServiceErrorMessageConstants.PARAMETER_ERROR);
+        }
+        Integer roleCode = userRoleService.upgradeToAdmin(userId);
+        return Result.success(roleCode);
+
     }
 
     /**
@@ -71,7 +76,11 @@ public class PermissionController {
      */
     @PostMapping("/permission/role/downgrade")
     public Result downgradeToUser(Long userId) {
-        return Result.success();
+        if(Objects.isNull(userId) || userId <= 0) {
+            return Result.fail(PermissionServiceErrorMessageConstants.PARAMETER_ERROR);
+        }
+        Integer roleCode = userRoleService.downgradeToUser(userId);
+        return Result.success(roleCode);
     }
 
 }

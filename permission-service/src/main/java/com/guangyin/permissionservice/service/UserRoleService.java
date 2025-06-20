@@ -25,4 +25,20 @@ public interface UserRoleService extends IService<UserRole> {
      * @return
      */
     Integer getUserRoleCode(Long userId);
+
+    /**
+     * 升级用户为管理员
+     *
+     * @param userId
+     * @return
+     */
+    Integer upgradeToAdmin(Long userId);
+
+    /**
+     * 降级用户为普通角色
+     *
+     * @param userId
+     * @return
+     */
+    Integer downgradeToUser(Long userId);
 }

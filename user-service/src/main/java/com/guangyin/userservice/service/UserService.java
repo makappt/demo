@@ -1,6 +1,7 @@
 package com.guangyin.userservice.service;
 
 import com.guangyin.userservice.context.ChangePasswordContext;
+import com.guangyin.userservice.context.UpdateUserContext;
 import com.guangyin.userservice.context.UserLoginContext;
 import com.guangyin.userservice.context.UserRegisterContext;
 import com.guangyin.userservice.entity.Users;
@@ -53,4 +54,11 @@ public interface UserService extends IService<Users> {
      * @return
      */
     UserVO info(Long userId);
+
+    /**
+     * 更新用户信息
+     *
+     * @param context
+     */
+    void update(UpdateUserContext context);
 }

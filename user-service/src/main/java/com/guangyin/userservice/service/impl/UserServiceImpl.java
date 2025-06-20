@@ -14,6 +14,7 @@ import com.guangyin.userservice.common.exception.UserServiceErrorMessageConstant
 import com.guangyin.userservice.common.utils.UserIdUtil;
 import com.guangyin.userservice.constants.UserConstants;
 import com.guangyin.userservice.context.ChangePasswordContext;
+import com.guangyin.userservice.context.UpdateUserContext;
 import com.guangyin.userservice.context.UserLoginContext;
 import com.guangyin.userservice.context.UserRegisterContext;
 import com.guangyin.userservice.converter.UserConverter;
@@ -175,6 +176,51 @@ public class UserServiceImpl extends ServiceImpl<UsersMapper, Users>
         }
     }
 
+    @Override
+    public void update(UpdateUserContext context) {
+        // 如果是自己更新自己的信息
+        Long currentUserId = UserIdUtil.get();
+        Long userId = context.getUserId();
+        if(Objects.equals(currentUserId, userId)) {
+            if(Objects.nonNull(context.getRoleId())) {
+                throw new MicroServiceBusinessException(UserServiceErrorMessageConstants.ONLY_SUPER_ADMIN_CAN_CHANGE_ROLE);
+            }
+            // 更新自己的信息
+            Users user = userConverter.updateUserContextToUsers(context);
+            user.setUpdateTime(new Date());
+            if (!updateById(user)) {
+                throw new MicroServiceBusinessException(UserServiceErrorMessageConstants.UPDATE_USER_FAILED);
+            }
+        }
+        else
+        {
+            // 如果是管理员或超级管理员更新其他用户信息
+            Integer currentUserRoleCode = permissionServiceClient.getUserRoleCode(currentUserId).getData();
+            Integer UserRoleCode = permissionServiceClient.getUserRoleCode(userId).getData();
+            //如果修改人的权限比被修改人的权限低，则抛出异常
+            if (currentUserRoleCode >= UserRoleCode) {
+                throw new MicroServiceBusinessException(UserServiceErrorMessageConstants.NO_PERMISSION_TO_CHANGE_PASSWORD);
+            }
+            // 如果不是超级管理员且要修改角色，则抛出异常
+            if(!Objects.equals(currentUserRoleCode,UserRoleEnum.SUPER_ADMIN.getCode()) && Objects.nonNull(context.getRoleId())) {
+                throw new MicroServiceBusinessException(UserServiceErrorMessageConstants.ONLY_SUPER_ADMIN_CAN_CHANGE_ROLE);
+            }
+            if(Objects.equals(currentUserRoleCode,UserRoleEnum.SUPER_ADMIN.getCode()) && Objects.nonNull(context.getRoleId())) {
+                //判断降级还是升级
+                if( Objects.equals(context.getRoleId(), UserRoleEnum.ADMIN.getCode())) {
+                    permissionServiceClient.upgradeToAdmin(context.getUserId());
+                }
+                else if(Objects.equals(context.getRoleId(), UserRoleEnum.USER.getCode())) {
+                    permissionServiceClient.downgradeToUser(context.getUserId());
+                }
+            }
+            Users user = userConverter.updateUserContextToUsers(context);
+            user.setUpdateTime(new Date());
+            if (!updateById(user)) {
+                throw new MicroServiceBusinessException(UserServiceErrorMessageConstants.UPDATE_USER_FAILED);
+            }
+        }
+    }
 
 
     /***********************************************private***********************************************/
@@ -392,6 +438,7 @@ public class UserServiceImpl extends ServiceImpl<UsersMapper, Users>
         entity.setUserId(IdUtil.get());
         entity.setSalt(salt);
         entity.setPassword(password);
+        entity.setRoleId(UserRoleEnum.USER.getCode());
         entity.setCreateTime(new Date());
         entity.setUpdateTime(new Date());
         context.setEntity(entity);
