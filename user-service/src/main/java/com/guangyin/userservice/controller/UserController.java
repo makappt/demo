@@ -2,6 +2,7 @@ package com.guangyin.userservice.controller;
 
 import com.guangyin.core.response.Result;
 import com.guangyin.userservice.common.annotation.LoginIgnore;
+import com.guangyin.userservice.common.annotation.OperationLog;
 import com.guangyin.userservice.context.ChangePasswordContext;
 import com.guangyin.userservice.context.UpdateUserContext;
 import com.guangyin.userservice.context.UserLoginContext;
@@ -37,6 +38,7 @@ public class UserController {
      * @return 返回用户id
      */
     @LoginIgnore
+    @OperationLog(action = "register", description = "用户注册")
     @PostMapping("/user/register")
     public Result register(@Validated @RequestBody UserRegisterPO userRegisterPO) {
         UserRegisterContext context = userConverter.userRegisterPOToUserRegisterContext(userRegisterPO);
@@ -51,6 +53,7 @@ public class UserController {
      * @return 返回有时效性的jwt accessToken
      */
     @LoginIgnore
+    @OperationLog(action = "login", description = "用户登录")
     @PostMapping("/user/login")
     public Result login(@Validated @RequestBody UserLoginPO userLoginPO) {
         UserLoginContext context = userConverter.userLoginPOToUserLoginContext(userLoginPO);
@@ -66,6 +69,7 @@ public class UserController {
      *
      * @return 用户信息列表
      */
+    @OperationLog(action = "users", description = "获取用户列表")
     @GetMapping("users")
     public Result users() {
         List<UserVO> userList = usersService.userList();
@@ -81,6 +85,7 @@ public class UserController {
      * @param userId 用户id
      * @return
      */
+    @OperationLog(action = "info", description = "查询某个用户的信息")
     @GetMapping("/user/{userId}")
     public Result info(@PathVariable Long userId) {
         UserVO userVO = usersService.info(userId);
@@ -96,6 +101,7 @@ public class UserController {
      * @param userId 用户id
      * @return
      */
+    @OperationLog(action = "update", description = "更新用户信息")
     @PutMapping("/user/{userId}")
     public Result update(@PathVariable Long userId, @Validated @RequestBody UpdateUserPO updateUserPO)
     {
@@ -115,6 +121,7 @@ public class UserController {
      * @return
      * @ChangePasswordPo 旧密码和新密码
      */
+    @OperationLog(action = "reset-password", description = "修改用户密码")
     @PostMapping("/user/reset-password")
     public Result changePassword(@Validated @RequestBody ChangePasswordPO changePasswordPO) {
         ChangePasswordContext context = userConverter.changePasswordPOToChangePasswordContext(changePasswordPO);
