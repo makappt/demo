@@ -59,7 +59,7 @@ public class UserController {
     public Result login(@Validated @RequestBody UserLoginPO userLoginPO) {
         UserLoginContext context = userConverter.userLoginPOToUserLoginContext(userLoginPO);
         String accessToken = usersService.login(context);
-        return Result.success(accessToken);
+        return Result.success((Object) accessToken);
     }
 
     /**
