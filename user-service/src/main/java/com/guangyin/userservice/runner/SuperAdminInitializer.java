@@ -1,9 +1,8 @@
 package com.guangyin.userservice.runner;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.guangyin.core.utils.IdUtil;
-import com.guangyin.core.utils.PasswordUtil;
-import com.guangyin.userservice.context.UserRegisterContext;
+import com.guangyin.userservice.common.framework.core.utils.IdUtil;
+import com.guangyin.userservice.common.framework.core.utils.PasswordUtil;
 import com.guangyin.userservice.entity.Users;
 import com.guangyin.userservice.service.UserService;
 import com.guangyin.userservice.client.PermissionServiceClient; // Assuming you have a client for this

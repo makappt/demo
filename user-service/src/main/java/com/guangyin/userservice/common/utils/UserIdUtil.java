@@ -1,6 +1,7 @@
 package com.guangyin.userservice.common.utils;
 
-import com.guangyin.core.constants.MicroServiceConstants;
+
+import com.guangyin.userservice.common.framework.core.constants.MicroServiceConstants;
 
 import java.util.Objects;
 

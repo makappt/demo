@@ -1,13 +1,13 @@
 package com.guangyin.userservice.common.aspect;
 
 import com.alibaba.fastjson.JSON;
-import com.guangyin.core.response.Result;
-import com.guangyin.core.utils.IdUtil;
-import com.guangyin.core.utils.JwtUtil;
 import com.guangyin.userservice.common.annotation.OperationLog;
+import com.guangyin.userservice.common.framework.core.response.Result;
+import com.guangyin.userservice.common.framework.core.utils.IdUtil;
+import com.guangyin.userservice.common.framework.core.utils.JwtUtil;
+import com.guangyin.userservice.common.framework.web.web.log.HttpLogEntityBuilder;
 import com.guangyin.userservice.common.utils.UserIdUtil;
 import com.guangyin.userservice.constants.UserConstants;
-import com.guangyin.web.log.HttpLogEntityBuilder;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;

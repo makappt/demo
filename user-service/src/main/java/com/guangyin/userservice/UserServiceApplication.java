@@ -1,6 +1,6 @@
 package com.guangyin.userservice;
 
-import com.guangyin.core.constants.MicroServiceConstants;
+import com.guangyin.userservice.common.framework.core.constants.MicroServiceConstants;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

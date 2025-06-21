@@ -56,7 +56,12 @@ start mqnamesrv.cmd
 start mqbroker.cmd -n 127.0.0.1:9876 autoCreateTopicEnable=true
 ```
 
-#### 4.运行sql文件
+### 4.redis
+```cpp
+redis-server
+```
+
+#### 5.运行sql文件
 
 ```cpp
 DROP DATABASE IF EXISTS user_db_1;
@@ -250,7 +255,7 @@ CREATE TABLE operation_logs (
 
 
 
-#### 5.添加jvm参数
+#### 6.添加jvm参数
 
 user-service
 

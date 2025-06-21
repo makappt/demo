@@ -1,9 +1,9 @@
 package com.guangyin.userservice.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.guangyin.core.response.Result;
 import com.guangyin.userservice.common.annotation.LoginIgnore;
 import com.guangyin.userservice.common.annotation.OperationLog;
+import com.guangyin.userservice.common.framework.core.response.Result;
 import com.guangyin.userservice.context.ChangePasswordContext;
 import com.guangyin.userservice.context.UpdateUserContext;
 import com.guangyin.userservice.context.UserLoginContext;
@@ -19,8 +19,6 @@ import com.guangyin.userservice.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 public class UserController {

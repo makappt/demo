@@ -1,7 +1,5 @@
 package com.guangyin.userservice.common.exception;
 
-import com.guangyin.core.response.ResponseCode;
-
 /**
  * 错误信息常量类
  */

@@ -1,10 +1,10 @@
 package com.guangyin.userservice.common.aspect;
 
-import com.guangyin.cachecore.constants.CacheConstants;
-import com.guangyin.core.response.ResponseCode;
-import com.guangyin.core.response.Result;
-import com.guangyin.core.utils.JwtUtil;
 import com.guangyin.userservice.common.annotation.LoginIgnore;
+import com.guangyin.userservice.common.framework.cache.cachecore.CacheConstants.CacheConstants;
+import com.guangyin.userservice.common.framework.core.response.ResponseCode;
+import com.guangyin.userservice.common.framework.core.response.Result;
+import com.guangyin.userservice.common.framework.core.utils.JwtUtil;
 import com.guangyin.userservice.common.utils.UserIdUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

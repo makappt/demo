@@ -1,7 +1,7 @@
 package com.guangyin.permissionservice.controller;
 
-import com.guangyin.core.response.Result;
 import com.guangyin.permissionservice.common.exception.PermissionServiceErrorMessageConstants;
+import com.guangyin.permissionservice.common.framework.core.response.Result;
 import com.guangyin.permissionservice.service.UserRoleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,6 @@
 package com.guangyin.userservice.client;
 
-import com.guangyin.core.response.Result;
-import com.guangyin.userservice.constants.UserConstants;
+import com.guangyin.userservice.common.framework.core.response.Result;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
