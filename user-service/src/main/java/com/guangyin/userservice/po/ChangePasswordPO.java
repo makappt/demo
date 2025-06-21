@@ -7,6 +7,10 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
+/**
+ * 修改密码的传输对象
+ * 用于接收前端传递的修改密码请求数据
+ */
 @Data
 public class ChangePasswordPO implements Serializable {
 

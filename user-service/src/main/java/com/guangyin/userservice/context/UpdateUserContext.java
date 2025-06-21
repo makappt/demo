@@ -5,6 +5,10 @@ import lombok.Data;
 
 import java.io.Serializable;
 
+/**
+ * 更新用户上下文
+ * 用于封装更新用户信息的相关数据
+ */
 @Data
 public class UpdateUserContext implements Serializable {
     private static final long serialVersionUID = 4299828493665850309L;

@@ -2,6 +2,13 @@ package com.guangyin.permissionservice.common.enums;
 
 import lombok.Getter;
 
+/**
+ * 用户角色枚举
+ * <p>
+ * 1. 超级管理员
+ * 2. 管理员
+ * 3. 普通用户
+ */
 @Getter
 public enum UserRoleEnum {
     /**

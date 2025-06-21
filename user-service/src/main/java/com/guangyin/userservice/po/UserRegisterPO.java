@@ -7,6 +7,10 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
+/**
+ * 用户注册PO
+ * 用于接收用户注册时的请求参数
+ */
 @Data
 public class UserRegisterPO implements Serializable {
 

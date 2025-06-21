@@ -11,6 +11,14 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
+/**
+ * 操作日志消费者
+ * 接收 RocketMQ 消息队列中的操作日志消息
+ * 将消息转换为 OperationLog 实体并保存到数据库
+ * <p>
+ * topic: operation-log-topic
+ * consumerGroup: logging-consumer-group
+ */
 @Slf4j
 @Component
 @RocketMQMessageListener(
@@ -27,7 +35,6 @@ public class OperationLogConsumer implements RocketMQListener<Map<String, Object
         try {
             OperationLog operationLog = new OperationLog();
 
-            // FIX: Handle number conversion safely
             Number logId = (Number) message.get("log_id");
             Number userId = (Number) message.get("user_id");
 

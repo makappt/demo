@@ -127,17 +127,11 @@ public class UserServiceImpl extends ServiceImpl<UsersMapper, Users>
         return userVOPage;
     }
 
-    private List<UserVO> convertUsersListToVO(List<Users> userList) {
-        if (userList == null || userList.isEmpty()) {
-            return Collections.emptyList();
-        }
-        return userList.stream().map(user -> {
-            UserVO userVO = userConverter.usersToUserVO(user);
-            userVO.setRole(getRoleName(user.getRoleId())); // Set the role description
-            return userVO;
-        }).collect(Collectors.toList());
-    }
-
+    /**
+     * 修改用户密码
+     *
+     * @param context
+     */
     @Override
     public void changePassword(ChangePasswordContext context) {
         Long userId = UserIdUtil.get();
@@ -160,6 +154,12 @@ public class UserServiceImpl extends ServiceImpl<UsersMapper, Users>
         exitLoginStatus(context);
     }
 
+    /**
+     * 查询用户信息
+     *
+     * @param userId
+     * @return
+     */
     @Override
     public UserVO info(Long userId) {
         //如果是自己查询自己的信息
@@ -185,6 +185,11 @@ public class UserServiceImpl extends ServiceImpl<UsersMapper, Users>
         }
     }
 
+    /**
+     * 更新用户信息
+     *
+     * @param context
+     */
     @Override
     public void update(UpdateUserContext context) {
         // 如果是自己更新自己的信息
@@ -233,6 +238,24 @@ public class UserServiceImpl extends ServiceImpl<UsersMapper, Users>
 
 
     /***********************************************private***********************************************/
+
+    /**
+     * 转换用户列表为VO对象列表
+     *
+     * @param userList
+     * @return
+     */
+    private List<UserVO> convertUsersListToVO(List<Users> userList) {
+        if (userList == null || userList.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return userList.stream().map(user -> {
+            UserVO userVO = userConverter.usersToUserVO(user);
+            userVO.setRole(getRoleName(user.getRoleId())); // Set the role description
+            return userVO;
+        }).collect(Collectors.toList());
+    }
+
     /**
      * 获取权限名称
      *
@@ -399,7 +422,6 @@ public class UserServiceImpl extends ServiceImpl<UsersMapper, Users>
             throw new MicroServiceBusinessException(UserServiceErrorMessageConstants.PASSWORD_NOT_MATCH);
         }
 
-        // 将用户信息设置到登录上下文中
         context.setEntity(user);
     }
 
@@ -442,7 +464,6 @@ public class UserServiceImpl extends ServiceImpl<UsersMapper, Users>
     private void assembleUserEntity(UserRegisterContext context) {
         Users entity = userConverter.userRegisterContextToUsers(context);
         String salt = PasswordUtil.getSalt();
-        // 对密码进行加密
         String password = PasswordUtil.encryptPassword(salt, context.getPassword());
         entity.setUserId(IdUtil.get());
         entity.setSalt(salt);

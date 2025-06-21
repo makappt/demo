@@ -4,29 +4,32 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+
 import java.io.Serializable;
+
 import lombok.Data;
 
 /**
- * 
+ * 用户身份关联实体类
+ *
  * @TableName user_roles
  */
-@TableName(value ="user_roles")
+@TableName(value = "user_roles")
 @Data
 public class UserRole implements Serializable {
     /**
-     *  主键ID
+     * 主键ID
      */
     @TableId(type = IdType.AUTO)
     private Long id;
 
     /**
-     *  用户ID
+     * 用户ID
      */
     private Long userId;
 
     /**
-     *  角色ID
+     * 角色ID
      */
     private Integer roleId;
 
@@ -46,8 +49,8 @@ public class UserRole implements Serializable {
         }
         UserRole other = (UserRole) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getUserId() == null ? other.getUserId() == null : this.getUserId().equals(other.getUserId()))
-            && (this.getRoleId() == null ? other.getRoleId() == null : this.getRoleId().equals(other.getRoleId()));
+                && (this.getUserId() == null ? other.getUserId() == null : this.getUserId().equals(other.getUserId()))
+                && (this.getRoleId() == null ? other.getRoleId() == null : this.getRoleId().equals(other.getRoleId()));
     }
 
     @Override

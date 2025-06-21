@@ -12,13 +12,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Objects;
 
 /**
-* @author zjz
-* @description 针对表【user_roles】的数据库操作Service实现
-* @createDate 2025-06-19 13:57:43
-*/
+ * @author zjz
+ * @description 针对表【user_roles】的数据库操作Service实现
+ * @createDate 2025-06-19 13:57:43
+ */
 @Service
 public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole>
-    implements UserRoleService{
+        implements UserRoleService {
 
     /**
      * 绑定默认角色给用户(普通用户)
@@ -50,6 +50,12 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole>
         return userRole.getId();
     }
 
+    /**
+     * 获取用户身份码
+     *
+     * @param userId
+     * @return
+     */
     @Override
     public Integer getUserRoleCode(Long userId) {
         QueryWrapper<UserRole> queryWrapper = new QueryWrapper<>();
@@ -61,6 +67,12 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole>
         return userRole.getRoleId();
     }
 
+    /**
+     * 超管调用：升级用户为管理员
+     *
+     * @param userId
+     * @return
+     */
     @Override
     public Integer upgradeToAdmin(Long userId) {
         QueryWrapper<UserRole> queryWrapper = new QueryWrapper<>();
@@ -68,7 +80,7 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole>
         UserRole userRole = this.getOne(queryWrapper);
 
         if (Objects.isNull(userRole)) {
-            return null; // 用户没有角色信息
+            return null;
         }
 
         // 如果用户已经是管理员，则不需要升级
@@ -83,6 +95,12 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole>
         return UserRoleEnum.ADMIN.getCode();
     }
 
+    /**
+     * 超管调用：降级用户为普通用户
+     *
+     * @param userId
+     * @return
+     */
     @Override
     public Integer downgradeToUser(Long userId) {
 
@@ -91,7 +109,7 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole>
         UserRole userRole = this.getOne(queryWrapper);
 
         if (Objects.isNull(userRole)) {
-            return null; // 用户没有角色信息
+            return null;
         }
 
         // 如果用户已经是普通用户，则不需要降级
@@ -106,6 +124,12 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole>
         return UserRoleEnum.USER.getCode();
     }
 
+    /**
+     * 绑定超级管理员
+     *
+     * @param userId
+     * @return
+     */
     @Override
     public Long bindSupperAdmin(Long userId) {
         QueryWrapper<UserRole> queryWrapper = new QueryWrapper<>();

@@ -4,36 +4,39 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+
 import java.io.Serializable;
+
 import lombok.Data;
 
 /**
- * 
+ * 日志实体类
+ *
  * @TableName operation_logs
  */
-@TableName(value ="operation_logs")
+@TableName(value = "operation_logs")
 @Data
 public class OperationLog implements Serializable {
     @TableId(type = IdType.AUTO)
     private Long logId;
 
     /**
-     *  用户ID
+     * 用户ID
      */
     private Long userId;
 
     /**
-     * 
+     * 操作类型
      */
     private String action;
 
     /**
-     * 
+     * 操作IP地址
      */
     private String ip;
 
     /**
-     * 
+     * 操作详情
      */
     private String detail;
 
@@ -53,10 +56,10 @@ public class OperationLog implements Serializable {
         }
         OperationLog other = (OperationLog) that;
         return (this.getLogId() == null ? other.getLogId() == null : this.getLogId().equals(other.getLogId()))
-            && (this.getUserId() == null ? other.getUserId() == null : this.getUserId().equals(other.getUserId()))
-            && (this.getAction() == null ? other.getAction() == null : this.getAction().equals(other.getAction()))
-            && (this.getIp() == null ? other.getIp() == null : this.getIp().equals(other.getIp()))
-            && (this.getDetail() == null ? other.getDetail() == null : this.getDetail().equals(other.getDetail()));
+                && (this.getUserId() == null ? other.getUserId() == null : this.getUserId().equals(other.getUserId()))
+                && (this.getAction() == null ? other.getAction() == null : this.getAction().equals(other.getAction()))
+                && (this.getIp() == null ? other.getIp() == null : this.getIp().equals(other.getIp()))
+                && (this.getDetail() == null ? other.getDetail() == null : this.getDetail().equals(other.getDetail()));
     }
 
     @Override

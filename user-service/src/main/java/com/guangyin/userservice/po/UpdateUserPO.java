@@ -4,10 +4,14 @@ import lombok.Data;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
+/**
+ * 更新用户信息的传输对象
+ * 用于接收前端传入的用户更新信息
+ * 包含用户名、邮箱、手机号码和角色ID等字段
+ */
 @Data
 public class UpdateUserPO implements Serializable {
 

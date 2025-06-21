@@ -7,6 +7,10 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
+/**
+ * 用户登录PO（持久化对象）
+ * 用于封装用户登录时的请求数据
+ */
 @Data
 public class UserLoginPO implements Serializable {
 

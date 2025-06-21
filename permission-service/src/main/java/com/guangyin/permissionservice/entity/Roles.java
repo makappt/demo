@@ -15,13 +15,13 @@ import lombok.Data;
 @Data
 public class Roles implements Serializable {
     /**
-     * 
+     * 身份ID
      */
     @TableId
     private Integer roleId;
 
     /**
-     * 
+     * 身份描述
      */
     private String roleCode;
 

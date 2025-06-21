@@ -34,6 +34,12 @@ public class PermissionController {
         return Result.success(result);
     }
 
+    /**
+     * 超管调用：绑定超级管理员角色
+     *
+     * @param userId
+     * @return
+     */
     @PostMapping("/permission/binSuperAdmin")
     public Result bindSupperAdmin(Long userId) {
         log.info("bindSupperAdmin userId: {}", userId);

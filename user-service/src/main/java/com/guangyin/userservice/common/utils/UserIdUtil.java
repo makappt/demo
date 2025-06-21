@@ -4,6 +4,10 @@ import com.guangyin.core.constants.MicroServiceConstants;
 
 import java.util.Objects;
 
+/**
+ * 用户ID工具类
+ * 在threadLocal中存储用户ID和获取用户ID
+ */
 public class UserIdUtil {
 
     private static ThreadLocal<Long> threadLocal = new ThreadLocal<>();

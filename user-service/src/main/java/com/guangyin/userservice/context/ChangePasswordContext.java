@@ -5,6 +5,10 @@ import lombok.Data;
 
 import java.io.Serializable;
 
+/**
+ * 修改密码上下文
+ * 用于封装修改密码所需的上下文信息
+ */
 @Data
 public class ChangePasswordContext implements Serializable {
 

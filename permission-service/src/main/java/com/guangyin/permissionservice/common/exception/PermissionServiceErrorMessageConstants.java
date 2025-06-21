@@ -1,5 +1,8 @@
 package com.guangyin.permissionservice.common.exception;
 
+/**
+ * 权限服务异常消息常量类
+ */
 public class PermissionServiceErrorMessageConstants {
     /**
      * 权限服务异常
