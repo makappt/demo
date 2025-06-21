@@ -1,5 +1,6 @@
 package com.guangyin.userservice.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.guangyin.userservice.context.ChangePasswordContext;
 import com.guangyin.userservice.context.UpdateUserContext;
 import com.guangyin.userservice.context.UserLoginContext;
@@ -38,7 +39,7 @@ public interface UserService extends IService<Users> {
      *
      * @return
      */
-    List<UserVO> userList();
+    Page<UserVO> userList(Page<Users> pageRequest);
 
     /**
      * 修改密码

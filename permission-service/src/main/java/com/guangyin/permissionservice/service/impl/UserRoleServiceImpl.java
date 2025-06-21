@@ -105,6 +105,25 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole>
 
         return UserRoleEnum.USER.getCode();
     }
+
+    @Override
+    public Long bindSupperAdmin(Long userId) {
+        QueryWrapper<UserRole> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", userId);
+        queryWrapper.eq("role_id", UserRoleEnum.SUPER_ADMIN.getCode());
+
+        UserRole existingRole = this.getOne(queryWrapper);
+        if (Objects.nonNull(existingRole)) {
+            return existingRole.getId();
+        }
+
+        UserRole userRole = new UserRole();
+        userRole.setRoleId(UserRoleEnum.SUPER_ADMIN.getCode());
+        userRole.setUserId(userId);
+        this.save(userRole);
+
+        return userRole.getId();
+    }
 }
 
 

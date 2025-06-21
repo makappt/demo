@@ -1,6 +1,7 @@
 package com.guangyin.userservice.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.guangyin.cachecore.constants.CacheConstants;
 import com.guangyin.core.exception.MicroServiceBusinessException;
@@ -30,6 +31,7 @@ import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author zjz
@@ -67,7 +69,6 @@ public class UserServiceImpl extends ServiceImpl<UsersMapper, Users>
     public Long register(UserRegisterContext context) {
         Users dbUser = getUsersByUsername(context.getUsername());
         if (Objects.nonNull(dbUser)) {
-            // 如果用户已存在，则抛出业务异常
             throw new MicroServiceBusinessException(UserServiceErrorMessageConstants.USERNAME_ALREADY_EXISTS);
         }
 
@@ -103,39 +104,47 @@ public class UserServiceImpl extends ServiceImpl<UsersMapper, Users>
      *
      * @return
      */
-    public List<UserVO> userList() {
+    public Page<UserVO> userList(Page<Users> pageRequest) {
         Long userId = UserIdUtil.get();
         //获取用户权限
         Result<Integer> userRoleCode = permissionServiceClient.getUserRoleCode(userId);
         Integer roleCode = userRoleCode.getData();
 
-        // 普通用户只能查看自己的信息
-        if (Objects.equals(roleCode, UserRoleEnum.USER.getCode())) {
-            Users user = getById(userId);
-            UserVO userVO = userConverter.usersToUserVO(user);
-            userVO.setRole(UserRoleEnum.USER.getDesc());
-            return Collections.singletonList(userVO);
-        }
-
-        // 管理员查看所有普通用户-分页查询 10条数据
         QueryWrapper<Users> queryWrapper = new QueryWrapper<>();
-        if (Objects.equals(roleCode, UserRoleEnum.ADMIN.getCode())) {
-            queryWrapper.eq("role_id", UserRoleEnum.USER.getCode());
-            List<Users> userList = list(queryWrapper);
-            return convertUsersList(userList, false);
-        }
 
-        // 超级管理员查看除超管外所有用户
-        queryWrapper.ne("role_id", UserRoleEnum.SUPER_ADMIN.getCode());
-        List<Users> userList = list(queryWrapper);
-        return convertUsersList(userList, true);
+        if (Objects.equals(roleCode, UserRoleEnum.USER.getCode())) {
+            queryWrapper.eq("user_id", userId);
+        }
+        else if (Objects.equals(roleCode, UserRoleEnum.ADMIN.getCode())) {
+            queryWrapper.eq("role_id", UserRoleEnum.USER.getCode());
+        }
+        else {
+            queryWrapper.ne("role_id", UserRoleEnum.SUPER_ADMIN.getCode());
+        }
+        Page<Users> usersPage = this.page(pageRequest, queryWrapper);
+        Page<UserVO> userVOPage = new Page<>(usersPage.getCurrent(), usersPage.getSize(), usersPage.getTotal());
+        userVOPage.setRecords(convertUsersListToVO(usersPage.getRecords()));
+        return userVOPage;
+    }
+
+    private List<UserVO> convertUsersListToVO(List<Users> userList) {
+        if (userList == null || userList.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return userList.stream().map(user -> {
+            UserVO userVO = userConverter.usersToUserVO(user);
+            userVO.setRole(getRoleName(user.getRoleId())); // Set the role description
+            return userVO;
+        }).collect(Collectors.toList());
     }
 
     @Override
     public void changePassword(ChangePasswordContext context) {
         Long userId = UserIdUtil.get();
         Long changeUserId = context.getUserId();
-
+        //获取要修改用户的信息
+        Users user = getById(changeUserId);
+        context.setEntity(user);
         //如果是自己修改自己的密码
         if (Objects.equals(changeUserId, userId)) {
             //校验旧密码

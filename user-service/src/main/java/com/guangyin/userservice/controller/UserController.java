@@ -1,5 +1,6 @@
 package com.guangyin.userservice.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.guangyin.core.response.Result;
 import com.guangyin.userservice.common.annotation.LoginIgnore;
 import com.guangyin.userservice.common.annotation.OperationLog;
@@ -71,8 +72,10 @@ public class UserController {
      */
     @OperationLog(action = "users", description = "获取用户列表")
     @GetMapping("users")
-    public Result users() {
-        List<UserVO> userList = usersService.userList();
+    public Result users(@RequestParam(defaultValue = "1") long current,
+                        @RequestParam(defaultValue = "10") long size) {
+        Page<Users> pageRequest = new Page<>(current, size);
+        Page<UserVO> userList = usersService.userList(pageRequest);
         return Result.success(userList);
     }
 

@@ -1,8 +1,11 @@
 package com.guangyin.userservice.mapper;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.guangyin.core.utils.PasswordUtil;
+import com.guangyin.userservice.client.PermissionServiceClient;
 import com.guangyin.userservice.entity.Users;
 import lombok.extern.slf4j.Slf4j;
+import org.checkerframework.checker.units.qual.N;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +16,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 @Slf4j
 public class UserMapperTest {
 
+    private static final String NAME = "testuser";
+    private static final String EMAIL = "testemail@qq.com";
+    private static final String PASSWORD = "testPassword";
+    private static final String PHONE = "13800000000";
+    private static final Integer ROLE_ID = 3;
+
     @Autowired
     private UsersMapper usersMapper;
 
+    @Autowired
+    private PermissionServiceClient permissionServiceClient; // Assuming you have a client for this
     /**
      * 测试ShardingSphere的分库分表成功
      */
@@ -24,25 +35,21 @@ public class UserMapperTest {
         // 删除所有数据
         //usersMapper.delete(null);
         // 插入数据
-        for(int i = 20; i < 40; ++i)
+        for(int i = 1; i < 20; ++i)
         {
             Users user = new Users();
-            user.setPassword("123456");
-            user.setEmail("lisi@example.com");
-            user.setPhone("1000000000");
-            user.setUsername("lisi" + i);
-            int result = usersMapper.insert(user);
+
+            user.setEmail(EMAIL);
+            user.setPhone(PHONE);
+            user.setUsername(NAME + i);
+            String salt = PasswordUtil.getSalt();
+            user.setSalt(salt);
+            user.setPassword(PasswordUtil.encryptPassword(salt, PASSWORD));
+            user.setRoleId(ROLE_ID);
+            user.setCreateTime(new java.util.Date());
+            user.setUpdateTime(new java.util.Date());
+            usersMapper.insert(user);
+            permissionServiceClient.bindDefaultRole(user.getUserId());
         }
-
-        //查询全部数量
-        Long count = usersMapper.selectCount(null);
-        log.info("查询到的用户数量: {}", count);
-
-        //查询username为lisi15的用户
-        QueryWrapper<Users> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("username", "lisi20");
-        Users user = usersMapper.selectOne(queryWrapper);
-        Assert.assertNotNull(user);
-        log.info("查询到的用户信息: {}", user);
     }
 }

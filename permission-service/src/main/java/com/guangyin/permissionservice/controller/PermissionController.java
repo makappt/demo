@@ -17,6 +17,7 @@ public class PermissionController {
 
     @Autowired
     private UserRoleService userRoleService;
+
     /**
      * 绑定默认角色（普通用户）
      *
@@ -26,15 +27,21 @@ public class PermissionController {
     @PostMapping("/permission/role/bind-default")
     public Result bindDefaultRole(Long userId) {
         log.info("bindDefaultRole userId: {}", userId);
-        if(Objects.isNull(userId) || userId <= 0) {
+        if (Objects.isNull(userId) || userId <= 0) {
             return Result.fail(PermissionServiceErrorMessageConstants.PARAMETER_ERROR);
         }
-        try{
-            Long result = userRoleService.bindDefaultRole(userId);
-            return Result.success(result);
-        }catch (Exception e) {
-            return Result.fail(PermissionServiceErrorMessageConstants.BIND_DEFAULT_ROLE_ERROR);
+        Long result = userRoleService.bindDefaultRole(userId);
+        return Result.success(result);
+    }
+
+    @PostMapping("/permission/binSuperAdmin")
+    public Result bindSupperAdmin(Long userId) {
+        log.info("bindSupperAdmin userId: {}", userId);
+        if (Objects.isNull(userId) || userId <= 0) {
+            return Result.fail(PermissionServiceErrorMessageConstants.PARAMETER_ERROR);
         }
+        Long result = userRoleService.bindSupperAdmin(userId);
+        return Result.success(result);
     }
 
     /**
@@ -45,7 +52,7 @@ public class PermissionController {
      */
     @GetMapping("/permission/role/get-code")
     public Result getUserRoleCode(Long userId) {
-        if(Objects.isNull(userId) || userId <= 0) {
+        if (Objects.isNull(userId) || userId <= 0) {
             return Result.fail(PermissionServiceErrorMessageConstants.PARAMETER_ERROR);
         }
         Integer roleCode = userRoleService.getUserRoleCode(userId);
@@ -60,7 +67,7 @@ public class PermissionController {
      */
     @PostMapping("/permission/role/upgrade")
     public Result upgradeToAdmin(Long userId) {
-        if(Objects.isNull(userId) || userId <= 0) {
+        if (Objects.isNull(userId) || userId <= 0) {
             return Result.fail(PermissionServiceErrorMessageConstants.PARAMETER_ERROR);
         }
         Integer roleCode = userRoleService.upgradeToAdmin(userId);
@@ -76,7 +83,7 @@ public class PermissionController {
      */
     @PostMapping("/permission/role/downgrade")
     public Result downgradeToUser(Long userId) {
-        if(Objects.isNull(userId) || userId <= 0) {
+        if (Objects.isNull(userId) || userId <= 0) {
             return Result.fail(PermissionServiceErrorMessageConstants.PARAMETER_ERROR);
         }
         Integer roleCode = userRoleService.downgradeToUser(userId);

@@ -41,4 +41,12 @@ public interface UserRoleService extends IService<UserRole> {
      * @return
      */
     Integer downgradeToUser(Long userId);
+
+    /**
+     * 绑定超级管理员角色
+     * 
+     * @param userId
+     * @return
+     */
+    Long bindSupperAdmin(Long userId);
 }
