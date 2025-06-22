@@ -61,7 +61,7 @@ public class HttpLogFilter extends OncePerRequestFilter {
         // 构建日志实体，读取请求和响应的详细信息（包括业务逻辑生成的响应内容）。
         HttpLogEntity httpLogEntity = HttpLogEntityBuilder.build(requestWrapper, responseWrapper, stopWatch);
         // 打印日志实体中的信息（假设 print 方法会输出日志）
-        httpLogEntity.print();
+        //httpLogEntity.print();
         // 将缓存的响应体内容写回到原始响应对象，确保客户端能收到响应
         // ContentCachingResponseWrapper 缓存了响应体内容，但原始的 HttpServletResponse 可能尚未写入数据（因为业务逻辑写入的是包装后的响应对象）。
         // 如果不调用 copyBodyToResponse()，客户端将无法收到响应内容，导致请求失败。
