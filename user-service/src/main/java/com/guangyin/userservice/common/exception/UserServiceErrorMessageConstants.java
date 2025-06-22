@@ -52,5 +52,8 @@ public class UserServiceErrorMessageConstants {
      */
     public static final String ONLY_SUPER_ADMIN_CAN_CHANGE_ROLE = "只有超级管理员可以修改用户角色信息，请联系管理员进行操作";
 
-
+    /**
+     * 系统繁忙，请稍后再试
+     */
+    public static final String REMOTE_SERVICE_CALL_FAILED = "系统繁忙，请稍后再试";
 }

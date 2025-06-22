@@ -114,11 +114,9 @@ public class UserServiceImpl extends ServiceImpl<UsersMapper, Users>
 
         if (Objects.equals(roleCode, UserRoleEnum.USER.getCode())) {
             queryWrapper.eq("user_id", userId);
-        }
-        else if (Objects.equals(roleCode, UserRoleEnum.ADMIN.getCode())) {
+        } else if (Objects.equals(roleCode, UserRoleEnum.ADMIN.getCode())) {
             queryWrapper.eq("role_id", UserRoleEnum.USER.getCode());
-        }
-        else {
+        } else {
             queryWrapper.ne("role_id", UserRoleEnum.SUPER_ADMIN.getCode());
         }
         Page<Users> usersPage = this.page(pageRequest, queryWrapper);
@@ -133,6 +131,7 @@ public class UserServiceImpl extends ServiceImpl<UsersMapper, Users>
      * @param context
      */
     @Override
+    @GlobalTransactional(name = "user-change-password-tx", rollbackFor = Exception.class)
     public void changePassword(ChangePasswordContext context) {
         Long userId = UserIdUtil.get();
         Long changeUserId = context.getUserId();
@@ -171,8 +170,7 @@ public class UserServiceImpl extends ServiceImpl<UsersMapper, Users>
             return userVO;
         }
         //否则是管理员或超级管理员查询其他用户信息
-        else
-        {
+        else {
             //确认权限是否符合
             checkUserPermission(currentId, userId);
             Users user = getById(userId);
@@ -191,48 +189,43 @@ public class UserServiceImpl extends ServiceImpl<UsersMapper, Users>
      * @param context
      */
     @Override
+    @GlobalTransactional(name = "user-update-tx", rollbackFor = Exception.class)
     public void update(UpdateUserContext context) {
-        // 如果是自己更新自己的信息
         Long currentUserId = UserIdUtil.get();
         Long userId = context.getUserId();
-        if(Objects.equals(currentUserId, userId)) {
-            if(Objects.nonNull(context.getRoleId())) {
+
+        // 如果是自己更新自己的信息
+        if (Objects.equals(currentUserId, userId)) {
+            if (Objects.nonNull(context.getRoleId())) {
                 throw new MicroServiceBusinessException(UserServiceErrorMessageConstants.ONLY_SUPER_ADMIN_CAN_CHANGE_ROLE);
             }
-            // 更新自己的信息
-            Users user = userConverter.updateUserContextToUsers(context);
-            user.setUpdateTime(new Date());
-            if (!updateById(user)) {
-                throw new MicroServiceBusinessException(UserServiceErrorMessageConstants.UPDATE_USER_FAILED);
+        } else {
+            checkUserPermission(currentUserId, userId);
+            // 如果需要修改角色ID
+            if (Objects.nonNull(context.getRoleId())) {
+                // 确认当前用户是超级管理员
+                Integer currentUserRoleCode = permissionServiceClient.getUserRoleCode(currentUserId).getData();
+                if (!Objects.equals(currentUserRoleCode, UserRoleEnum.SUPER_ADMIN.getCode())) {
+                    throw new MicroServiceBusinessException(UserServiceErrorMessageConstants.ONLY_SUPER_ADMIN_CAN_CHANGE_ROLE);
+                }
+
+                //判断是否是升级还是降级
+                try {
+                    if (Objects.equals(context.getRoleId(), UserRoleEnum.ADMIN.getCode())) {
+                        permissionServiceClient.upgradeToAdmin(userId);
+                    } else if (Objects.equals(context.getRoleId(), UserRoleEnum.USER.getCode())) {
+                        permissionServiceClient.downgradeToUser(userId);
+                    }
+                } catch (Exception e) {
+                    throw new MicroServiceBusinessException(UserServiceErrorMessageConstants.REMOTE_SERVICE_CALL_FAILED);
+                }
             }
         }
-        else
-        {
-            // 如果是管理员或超级管理员更新其他用户信息
-            Integer currentUserRoleCode = permissionServiceClient.getUserRoleCode(currentUserId).getData();
-            Integer UserRoleCode = permissionServiceClient.getUserRoleCode(userId).getData();
-            //如果修改人的权限比被修改人的权限低，则抛出异常
-            if (currentUserRoleCode >= UserRoleCode) {
-                throw new MicroServiceBusinessException(UserServiceErrorMessageConstants.NO_PERMISSION_TO_CHANGE_PASSWORD);
-            }
-            // 如果不是超级管理员且要修改角色，则抛出异常
-            if(!Objects.equals(currentUserRoleCode,UserRoleEnum.SUPER_ADMIN.getCode()) && Objects.nonNull(context.getRoleId())) {
-                throw new MicroServiceBusinessException(UserServiceErrorMessageConstants.ONLY_SUPER_ADMIN_CAN_CHANGE_ROLE);
-            }
-            if(Objects.equals(currentUserRoleCode,UserRoleEnum.SUPER_ADMIN.getCode()) && Objects.nonNull(context.getRoleId())) {
-                //判断降级还是升级
-                if( Objects.equals(context.getRoleId(), UserRoleEnum.ADMIN.getCode())) {
-                    permissionServiceClient.upgradeToAdmin(context.getUserId());
-                }
-                else if(Objects.equals(context.getRoleId(), UserRoleEnum.USER.getCode())) {
-                    permissionServiceClient.downgradeToUser(context.getUserId());
-                }
-            }
-            Users user = userConverter.updateUserContextToUsers(context);
-            user.setUpdateTime(new Date());
-            if (!updateById(user)) {
-                throw new MicroServiceBusinessException(UserServiceErrorMessageConstants.UPDATE_USER_FAILED);
-            }
+        // 执行用户信息更新
+        Users user = userConverter.updateUserContextToUsers(context);
+        user.setUpdateTime(new Date());
+        if (!updateById(user)) {
+            throw new MicroServiceBusinessException(UserServiceErrorMessageConstants.UPDATE_USER_FAILED);
         }
     }
 
@@ -282,11 +275,15 @@ public class UserServiceImpl extends ServiceImpl<UsersMapper, Users>
      * @param UserId
      */
     private void checkUserPermission(Long currentUserId, Long UserId) {
-        Integer currentUserRoleCode = permissionServiceClient.getUserRoleCode(currentUserId).getData();
-        Integer UserRoleCode = permissionServiceClient.getUserRoleCode(UserId).getData();
-        //如果修改人的权限比被修改人的权限低，则抛出异常
-        if (currentUserRoleCode >= UserRoleCode) {
-            throw new MicroServiceBusinessException(UserServiceErrorMessageConstants.NO_PERMISSION_TO_CHANGE_PASSWORD);
+        try {
+            Integer currentUserRoleCode = permissionServiceClient.getUserRoleCode(currentUserId).getData();
+            Integer UserRoleCode = permissionServiceClient.getUserRoleCode(UserId).getData();
+            //如果修改人的权限比被修改人的权限低，则抛出异常
+            if (currentUserRoleCode >= UserRoleCode) {
+                throw new MicroServiceBusinessException(UserServiceErrorMessageConstants.NO_PERMISSION_TO_CHANGE_PASSWORD);
+            }
+        } catch (Exception e) {
+            throw new MicroServiceBusinessException(UserServiceErrorMessageConstants.REMOTE_SERVICE_CALL_FAILED);
         }
     }
 
@@ -449,9 +446,13 @@ public class UserServiceImpl extends ServiceImpl<UsersMapper, Users>
             if (!save(entity)) {
                 throw new MicroServiceBusinessException(UserServiceErrorMessageConstants.REGISTER_FAILED);
             }
-            Result result = permissionServiceClient.bindDefaultRole(entity.getUserId());
-            if (!result.isSuccess()) {
-                throw new MicroServiceBusinessException(UserServiceErrorMessageConstants.BIND_DEFAULT_ROLE_FAILED);
+            try {
+                Result result = permissionServiceClient.bindDefaultRole(entity.getUserId());
+                if (!result.isSuccess()) {
+                    throw new MicroServiceBusinessException(UserServiceErrorMessageConstants.BIND_DEFAULT_ROLE_FAILED);
+                }
+            } catch (Exception e) {
+                throw new MicroServiceBusinessException(UserServiceErrorMessageConstants.REMOTE_SERVICE_CALL_FAILED);
             }
         }
     }

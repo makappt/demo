@@ -74,6 +74,7 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole>
      * @return
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Integer upgradeToAdmin(Long userId) {
         QueryWrapper<UserRole> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("user_id", userId);
@@ -102,6 +103,7 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole>
      * @return
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Integer downgradeToUser(Long userId) {
 
         QueryWrapper<UserRole> queryWrapper = new QueryWrapper<>();
@@ -131,6 +133,7 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole>
      * @return
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Long bindSupperAdmin(Long userId) {
         QueryWrapper<UserRole> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("user_id", userId);
